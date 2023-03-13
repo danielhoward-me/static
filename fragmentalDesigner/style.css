@@ -9,3 +9,7 @@
 .canvas:active {
 	cursor: grabbing;
 }
+
+body {
+	overscroll-behavior: contain;
+}
