@@ -1,3 +1,7 @@
+body {
+	overscroll-behavior: contain;
+}
+
 .canvas {
 	position: absolute;
 	top: 0;
@@ -10,6 +14,12 @@
 	cursor: grabbing;
 }
 
-body {
-	overscroll-behavior: contain;
+.settings-box {
+	background-color: #fdfdff;
+	border-radius: 0.5em;
+	box-shadow: 2px 3px 7px 2px rgba(0,0,0,0.02);
+	padding: 20px;
+	margin: 0 auto 15px auto;
+	width: 600px;
+
 }
