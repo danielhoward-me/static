@@ -13,44 +13,56 @@ const majorGridLineColour = 'rgba(0, 0, 0, 0.5)';
 function drawFrame() {
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-	const firstGridLineValueX = Math.ceil(topLeftPoint[0] / gridLineFrequency) * gridLineFrequency;
-	for (let value = firstGridLineValueX; value < topLeftPoint[0] + (canvas.width * scale); value += gridLineFrequency) {
-		ctx.beginPath();
-		ctx.moveTo(...convertGraphPointToCanvasPoint([value, topLeftPoint[1]]));
-		ctx.lineTo(...convertGraphPointToCanvasPoint([value, topLeftPoint[1] - (canvas.height * scale)]));
-
-		if (value === 0) {
-			ctx.strokeStyle = majorGridLineColour;
-		} else {
-			ctx.strokeStyle = normalGridLineColour;
-		}
-
-		ctx.stroke();
-	}
-
-	const firstGridLineValueY = Math.ceil(topLeftPoint[1] / gridLineFrequency) * gridLineFrequency;
-	for (let value = firstGridLineValueY; value > topLeftPoint[1] - (canvas.height * scale); value -= gridLineFrequency) {
-		ctx.beginPath();
-		ctx.moveTo(...convertGraphPointToCanvasPoint([topLeftPoint[0], value]));
-		ctx.lineTo(...convertGraphPointToCanvasPoint([topLeftPoint[0] + (canvas.width * scale), value]));
-
-		if (value === 0) {
-			ctx.strokeStyle = majorGridLineColour;
-		} else {
-			ctx.strokeStyle = normalGridLineColour;
-		}
-
-		ctx.stroke();
-	}
+	drawGridLine(topLeftPoint[0], topLeftPoint[1], canvas.width, canvas.height, false);
+	drawGridLine(topLeftPoint[1], topLeftPoint[0], canvas.height, canvas.width, true);
 
 	window.requestAnimationFrame(drawFrame);
 }
 window.requestAnimationFrame(drawFrame);
 
+function drawGridLine(startPointLoopCoord, startPointDrawingCoord, drawLinesUntil, lineLength, isHorizontal) {
+	const lineCoordIndex = isHorizontal ? 1 : 0;
+	const valueModifier = isHorizontal ? -1 : 1;
+	const incrementer = gridLineFrequency * valueModifier;
+
+	const modifiedScale = scale * valueModifier;
+	const scaledModifiedLength = lineLength * modifiedScale; 
+	const loopEnd = startPointLoopCoord + (drawLinesUntil * modifiedScale);
+
+	const from = [startPointDrawingCoord, startPointDrawingCoord];
+	const to = [startPointDrawingCoord - scaledModifiedLength, startPointDrawingCoord - scaledModifiedLength];
+
+	const firstGridLineValue = Math.ceil(startPointLoopCoord / gridLineFrequency) * gridLineFrequency;
+	for (let value = firstGridLineValue; isHorizontal ? (value > loopEnd) : (value < loopEnd); value += incrementer) {
+		ctx.beginPath();
+
+		from[lineCoordIndex] = value;
+		to[lineCoordIndex] = value;
+
+		ctx.moveTo(...convertGraphPointToCanvasPoint(from));
+		ctx.lineTo(...convertGraphPointToCanvasPoint(to));
+
+		if (value === 0) {
+			ctx.strokeStyle = majorGridLineColour;
+		} else {
+			ctx.strokeStyle = normalGridLineColour;
+		}
+
+		ctx.stroke();
+	}
+}
+
 function convertGraphPointToCanvasPoint(graphPoint) {
 	return [
 		(graphPoint[0] - topLeftPoint[0])/scale,
 		-(graphPoint[1] - topLeftPoint[1])/scale,
+	];
+}
+
+function convertCanvasPointToGraphPoint(canvasPoint) {
+	return [
+		canvasPoint[0] * scale + topLeftPoint[0],
+		-canvasPoint[1] * scale + topLeftPoint[1],
 	];
 }
 
@@ -92,12 +104,24 @@ window.addEventListener('touchmove', handleTouchDrag);
 function handleZoom(event) {
 	event.preventDefault();
 
-	scale *= 1 + (event.deltaY / 100);
+	const beforeMousePosition = convertCanvasPointToGraphPoint([event.clientX, event.clientY]);
+
+	const change = event.deltaY;
+	const initialMultiplier = 1 + Math.abs(event.deltaY / 200);
+	const multiplier = change < 0 ? 1/initialMultiplier : initialMultiplier;
+
+	scale *= multiplier;
 
 	if (scale < 0.01) {
 		scale = 0.01;
 	} else if (scale > 10) {
 		scale = 10;
 	}
+
+	// Shift the top left point so that the mouse is still over the same point
+	const newMousePosition = convertCanvasPointToGraphPoint([event.clientX, event.clientY]);
+
+	topLeftPoint[0] -= newMousePosition[0] - beforeMousePosition[0];
+	topLeftPoint[1] -= newMousePosition[1] - beforeMousePosition[1];
 }
 window.addEventListener('wheel', handleZoom, {passive: false});
