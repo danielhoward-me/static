@@ -77,6 +77,12 @@ window.addEventListener('mousemove', handleMouseDrag);
 window.addEventListener('mousedown', () => mousedown = true);
 window.addEventListener('mouseup', () => mousedown = false);
 
+function handleTouchStart(event) {
+	if (event.touches.length !== 1) return;
+
+	const touch = event.touches[0];
+	touch.target.lastTouch = touch;
+}
 function handleTouchDrag(event) {
 	if (event.touches.length !== 1) return;
 
@@ -84,22 +90,21 @@ function handleTouchDrag(event) {
 	const lastTouch = touch.target.lastTouch;
 
 	if (lastTouch) {
-		const movementX = touch.clientX - lastTouch.clientX;
-		const movementY = touch.clientY - lastTouch.clientY;
-
-		// The last touch could be from a touch from a while ago
-		if (Math.abs(movementX) > 100 || Math.abs(movementY) > 100) {
-			touch.target.lastTouch = touch;
-			return;
-		}
-
 		topLeftPoint[0] -= (touch.clientX - lastTouch.clientX) * scale;
 		topLeftPoint[1] += (touch.clientY - lastTouch.clientY) * scale;
 	}
 
 	touch.target.lastTouch = touch;
 }
+function handleTouchEnd(event) {
+	if (event.touches.length !== 0) return;
+
+	const touch = event.touches[0];
+	touch.target.lastTouch = null;
+}
+window.addEventListener('touchstart', handleTouchStart);
 window.addEventListener('touchmove', handleTouchDrag);
+window.addEventListener('touchend', handleTouchEnd);
 
 function handleZoom(event) {
 	event.preventDefault();

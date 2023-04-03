@@ -1,13 +1,11 @@
 const $ = (id) => document.getElementById(id);
 
-/**
- * @type {HTMLCanvasElement}
- */
+/** @type {HTMLCanvasElement} */
 const canvas = $('canvas');
 
 function resizeCanvas() {
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
+  canvas.width = screen.width;
+  canvas.height = screen.height;
 }
 window.addEventListener('resize', resizeCanvas);
 resizeCanvas();
