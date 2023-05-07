@@ -7,6 +7,8 @@ const topLeftPoint = [
 	scale * canvas.height/2
 ];
 
+let assets = [];
+
 const normalGridLineColour = 'rgba(0, 0, 0, 0.2)';
 const majorGridLineColour = 'rgba(0, 0, 0, 0.5)';
 
@@ -15,6 +17,8 @@ function drawFrame() {
 
 	drawGridLine(topLeftPoint[0], topLeftPoint[1], canvas.width, canvas.height, false);
 	drawGridLine(topLeftPoint[1], topLeftPoint[0], canvas.height, canvas.width, true);
+
+	drawPoints(assets);
 
 	window.requestAnimationFrame(drawFrame);
 }
@@ -130,3 +134,16 @@ function handleZoom(event) {
 	topLeftPoint[1] -= newMousePosition[1] - beforeMousePosition[1];
 }
 window.addEventListener('wheel', handleZoom, {passive: false});
+
+function addPoint(coord, radius) {
+	assets.push({coord, radius});
+}
+function drawAssets(assets) {
+	ctx.fillStyle = 'black';
+	ctx.beginPath();
+	points.forEach((asset) => {
+		const canvasCoord = convertGraphPointToCanvasPoint(coord);
+		ctx.arc(...canvasCoord, radius / scale, 0, 2 * Math.PI);
+	});
+	ctx.fill();
+}

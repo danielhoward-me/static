@@ -4,8 +4,8 @@ const $ = (id) => document.getElementById(id);
 const canvas = $('canvas');
 
 function resizeCanvas() {
-  canvas.width = screen.width;
-  canvas.height = screen.height;
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
 }
 window.addEventListener('resize', resizeCanvas);
 resizeCanvas();
