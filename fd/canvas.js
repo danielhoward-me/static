@@ -18,7 +18,7 @@ function drawFrame() {
 	drawGridLine(topLeftPoint[0], topLeftPoint[1], canvas.width, canvas.height, false);
 	drawGridLine(topLeftPoint[1], topLeftPoint[0], canvas.height, canvas.width, true);
 
-	drawPoints(assets);
+	drawAssets(assets);
 
 	window.requestAnimationFrame(drawFrame);
 }
@@ -141,7 +141,7 @@ function addPoint(coord, radius) {
 function drawAssets(assets) {
 	ctx.fillStyle = 'black';
 	ctx.beginPath();
-	points.forEach((asset) => {
+	assets.forEach((asset) => {
 		const canvasCoord = convertGraphPointToCanvasPoint(coord);
 		ctx.arc(...canvasCoord, radius / scale, 0, 2 * Math.PI);
 	});
