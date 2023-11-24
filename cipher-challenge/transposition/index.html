@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+	<style>
+		.plain-text {
+			padding: 5px;
+			border: 1px solid black;
+			border-radius: 5px;
+			background-color: rgb(237, 237, 237);
+			font-family: monospace;
+			width: min-content;
+			margin: 5px;
+		}
+		.all-decodes {
+			display: flex;
+			flex-wrap: wrap;
+		}
+	</style>
+</head>
+<body style="word-wrap: break-word;">
+	<form id="valuesForm">
+		<label for="ciphertext">Ciphertext:</label>
+		<textarea id="ciphertext" name="ciphertext" value="" style="height: 400px; width: 400px;">AIYNA GKRCT ELUOI SGAEE LLSON OKONS NAAOT OWDSM SEAAT OEPNC EDTLV UNTRL IDDTH HEPTE FAIAD GOSWR EMUIR EINMO USRSG SIEHN YARSR ESNOR ROEDR ELEON PESEE HUAEM AIOCR BRMEI ISFEL TNIRT EYLVA OTTTE SROTR NWAOI QIIKN EANTO AETNT TIEOE TNTFU NIDFE ETMSR TMHEO CDIEE AYECY FIOHE SAPEC NRLDW DNSII LNTGE IOAAD SEEBS EDOUA SLITR TESRO SOSTA LEEIA YAGLN YOESO EAROO AMEOS NISGA IAHAL NSTEC ITTEU CDRSI WLGMN ITEMP ENNED WVUFY LLSNV YRDEE ELTRT ALODP ISSDP RSNTY LASED EPTRP ODNCI CBNAR NAYHS POAAL VYLEO ARRDI LNSSY IIECO ADEUE ETEAP ADSAP BREPO LSTIF LECCI VERSA EDOOC WRSGO OEUEN NOCLQ EFEES NRRCA RDQOS AACRR PLNIE HSTEB EMTER SDNLY ATREO TNMER TNELN LAIUI TFEEN TGIFL ISWDE NCMSE</textarea>
+		<br>
+
+		<label for="rowLength">Row Length:</label>
+		<input type="string" id="rowLength" name="rowLength" value="1, 2, 4, 5, 7, 8, 10, 14, 16, 20, 28, 35, 40, 56, 70, 80, 112, 140, 280, 560">
+		<br>
+
+		<label for="colours">Colours:</label>
+		<input type="string" id="colours" name="colours" value="a red, b green, c blue">
+		<br>
+
+		<button type="submit">Generate</button>
+	</form>
+
+	Output:<br>
+	<div id="output">
+
+	</div>
+
+	<script src="./index.js"></script>
+</body>
+</html>
